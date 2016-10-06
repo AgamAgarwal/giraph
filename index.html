@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<title>Giraph</title>
+		<style>
+			#canvas1 {
+				display:block;
+				position:relative;
+				margin:auto;
+				border:1px solid black;
+			}
+			#container {
+				margin:auto;
+				position:relative;
+				width:1200;
+			}
+			.title{
+				position:relative;
+				text-align:center;
+			}
+			#fps_meter{
+				position:relative;
+				margin:auto;
+				width:500px;
+
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<div class="title">Giraph</div>
+			<canvas id="canvas1" width=500 height=500></canvas>
+			<div id="fps_meter"></div>
+			<input type="textbox" id="expression1" value="sin(x-t)"/>
+			<input type="button" value="Start" id="start_button" onclick="start_pressed()"/>
+			<input type="button" value="Stop" id="stop_button" onclick="stop_pressed()"/>
+		</div>
+		<script src="scripts/graph_main.js"></script>
+	</body>
+</html>
