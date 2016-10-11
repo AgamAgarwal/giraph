@@ -1,12 +1,18 @@
-max_fps = 30;
+max_fps = 60;
 running = false;
-start_x = -5;
-end_x = 5;
-start_y = -5;
-end_y = 5;
-n_points = 100;
+
+n_points = 500;
 graph_canvas = document.getElementById("canvas1");
+
+graph_canvas.width = document.body.clientWidth;
+graph_canvas.height = document.body.clientHeight;
 canvas_context = graph_canvas.getContext("2d");
+console.log(graph_canvas.width, graph_canvas.height);
+start_x = -(graph_canvas.width)/2/10;
+end_x = (graph_canvas.width)/2/10;
+start_y = -(graph_canvas.height)/2/10;
+end_y = (graph_canvas.height)/2/10;
+
 present_time = 0;
 function start_pressed(){ 
 	running = true;
@@ -48,7 +54,8 @@ function draw_frame(timestamp) {
 
 last_time = 0;
 function update_fps(timestamp){
-	document.getElementById("fps_meter").innerHTML = Math.round(1000/(timestamp-last_time)) + " fps" ;
+	fps = Math.round(1000/(timestamp-last_time));
+	document.getElementById("fps_meter").innerHTML = fps + " fps, "+n_points + " points" ;
 }
 function frame_driver(timestamp){
 	if(timestamp < last_time + (1000/max_fps)){
@@ -57,10 +64,18 @@ function frame_driver(timestamp){
 	}
 	if(running){
 		draw_frame(timestamp);
-		
 	}
 	update_fps(timestamp);
 	last_time = timestamp;
 	requestAnimationFrame(frame_driver);
 }
-frame_driver();
+window.onresize=function(width, height){
+	graph_canvas.width = document.body.clientWidth;
+	graph_canvas.height = document.body.clientHeight;
+	start_x = -(graph_canvas.width)/2/10;
+	end_x = (graph_canvas.width)/2/10;
+	start_y = -(graph_canvas.height)/2/10;
+	end_y = (graph_canvas.height)/2/10;
+}
+
+requestAnimationFrame(frame_driver);

@@ -5,35 +5,43 @@
 			#canvas1 {
 				display:block;
 				position:relative;
-				margin:auto;
-				border:1px solid black;
+				margin:0 0;
+				position: absolute;
+				top:0px;
+				left:0px;
 			}
-			#container {
-				margin:auto;
-				position:relative;
-				width:1200;
+			.floating-box{
+				position:absolute;
+				top:0px;
+				z-index: 100;	
+				padding: 20px;
+				background-color: rgba(128,128,128,0.5);
+				border-radius: 5px;	
 			}
-			.title{
-				position:relative;
-				text-align:center;
+			#expression_boxes{
+				top:100px;
 			}
 			#fps_meter{
-				position:relative;
-				margin:auto;
-				width:500px;
-
+				display: inline-block;
+			}
+			#control_boxes{
+				top : 5px;
 			}
 		</style>
 	</head>
 	<body>
-		<div id="container">
-			<div class="title">Giraph</div>
-			<canvas id="canvas1" width=500 height=500></canvas>
-			<div id="fps_meter"></div>
-			<input type="textbox" id="expression1" value="sin(x-t)"/>
-			<input type="button" value="Start" id="start_button" onclick="start_pressed()"/>
+		<canvas id="canvas1" ></canvas>
+		
+		<div class="floating-box" id="control_boxes">
+			<input type="button" value="Start" id="start_button" onclick="start_pressed()" />
 			<input type="button" value="Stop" id="stop_button" onclick="stop_pressed()"/>
+			&nbsp;
+			<div id="fps_meter"></div>
+		</div>
+		<div class="floating-box" id="expression_boxes">
+			<input type="textbox" id="expression1" value="sin(x-t)"/>
 		</div>
 		<script src="scripts/graph_main.js"></script>
+
 	</body>
 </html>
