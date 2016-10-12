@@ -47,6 +47,9 @@ function plot(expr, timestamp, color) {
 	for(i=start_x;i<=end_x;i+=(end_x-start_x)/n_points){
 		x = i;
 		y = func(x, present_time);
+		if (isNaN(y)) {
+			continue;
+		}
 		plot_x = (x-start_x)/(end_x-start_x)*graph_canvas.width;
 		plot_y = graph_canvas.height-(y-start_y)/(end_y-start_y)*graph_canvas.height;
 		if(first_point){
