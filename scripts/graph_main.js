@@ -14,31 +14,39 @@ start_y = -(graph_canvas.height)/2/10;
 end_y = (graph_canvas.height)/2/10;
 
 present_time = 0;
-function start_pressed(){ 
+function start_pressed(){
 	running = true;
 }
 function stop_pressed() {
 	running = false;
 }
-function draw_frame(timestamp) {
-	present_time = timestamp/100;
-	canvas_context.clearRect(0,0,graph_canvas.width, graph_canvas.height);
-	canvas_context.beginPath();
-	expr = document.getElementById("expression1").value;
+
+function create_function(expr) {
 	if(expr == "")
-		expr = "0";
-	first_point = true;
-	canvas_context.moveTo(0,0);
-	for(i=start_x;i<=end_x;i+=(end_x-start_x)/n_points){
-		x=i;
-		t=present_time;
+		return function() { return 0; }
+	return function(x, t) {
 		with(Math){
 			try{
-				y=eval(expr);
-			}catch(err){
+				return eval(expr);
+			} catch(err) {
+				// TODO: Show an error to the user
 				return;
 			}
 		}
+	}
+}
+
+function plot(expr, timestamp, color) {
+	func = create_function(expr);
+
+	present_time = timestamp/100;
+
+	first_point = true;
+	canvas_context.beginPath();
+	canvas_context.moveTo(0,0);
+	for(i=start_x;i<=end_x;i+=(end_x-start_x)/n_points){
+		x = i;
+		y = func(x, present_time);
 		plot_x = (x-start_x)/(end_x-start_x)*graph_canvas.width;
 		plot_y = graph_canvas.height-(y-start_y)/(end_y-start_y)*graph_canvas.height;
 		if(first_point){
@@ -48,8 +56,17 @@ function draw_frame(timestamp) {
 			canvas_context.lineTo(plot_x, plot_y);
 		}
 	}
-	canvas_context.strokeStyle="red";
+	canvas_context.strokeStyle = color;
 	canvas_context.stroke();
+}
+
+function draw_frame(timestamp) {
+
+	canvas_context.clearRect(0,0,graph_canvas.width, graph_canvas.height);
+
+	expr = document.getElementById("expression1").value;
+
+	plot(expr, timestamp, "red");
 }
 
 last_time = 0;
