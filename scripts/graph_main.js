@@ -22,16 +22,26 @@ function stop_pressed() {
 }
 
 function create_function(expr) {
-	if(expr == "")
-		return function() { return 0; }
+	var default_function = function() { return 0; }
+
+	if (expr == "") {
+		return default_function;
+	}
+
+	var code;
+	try {
+		code = math.compile(expr);
+	} catch(err) {
+		// TODO: Show an error to the user
+		return default_function;
+	}
+
 	return function(x, t) {
-		with(Math){
-			try{
-				return eval(expr);
-			} catch(err) {
-				// TODO: Show an error to the user
-				return;
-			}
+		try{
+			return code.eval({x, t});
+		} catch(err) {
+			// TODO: Show an error to the user
+			return;
 		}
 	}
 }

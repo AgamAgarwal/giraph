@@ -13,10 +13,10 @@
 			.floating-box{
 				position:absolute;
 				top:0px;
-				z-index: 100;	
+				z-index: 100;
 				padding: 20px;
 				background-color: rgba(128,128,128,0.5);
-				border-radius: 5px;	
+				border-radius: 5px;
 			}
 			#expression_boxes{
 				top:100px;
@@ -28,10 +28,11 @@
 				top : 5px;
 			}
 		</style>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/3.5.3/math.min.js"></script>
 	</head>
 	<body>
 		<canvas id="canvas1" ></canvas>
-		
+
 		<div class="floating-box" id="control_boxes">
 			<input type="button" value="Start" id="start_button" onclick="start_pressed()" />
 			<input type="button" value="Stop" id="stop_button" onclick="stop_pressed()"/>
