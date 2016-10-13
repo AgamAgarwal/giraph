@@ -64,11 +64,8 @@ function plot(expr, timestamp, color) {
 }
 
 function draw_frame(timestamp) {
-
 	canvas_context.clearRect(0,0,graph_canvas.width, graph_canvas.height);
-
 	expr = document.getElementById("expression1").value;
-
 	plot(expr, timestamp, "red");
 }
 
@@ -82,13 +79,17 @@ function frame_driver(timestamp){
 		requestAnimationFrame(frame_driver);
 		return;
 	}
-	if(running){
+	if(running || canvas_held){
+		if(canvas_held)
+			update_bounds();
 		draw_frame(timestamp);
 	}
 	update_fps(timestamp);
 	last_time = timestamp;
 	requestAnimationFrame(frame_driver);
 }
+
+
 window.onresize=function(width, height){
 	graph_canvas.width = document.body.clientWidth;
 	graph_canvas.height = document.body.clientHeight;
@@ -99,3 +100,44 @@ window.onresize=function(width, height){
 }
 
 requestAnimationFrame(frame_driver);
+
+
+curr_mouse_x=0;
+curr_mouse_y=0;
+window.onmousemove=function(event){
+	curr_mouse_x = event.screenX;
+	curr_mouse_y = event.screenY;
+}
+
+canvas_down_x=0;
+canvas_down_y=0;
+canvas_down_start_x=0;
+canvas_down_start_y=0;
+canvas_down_end_x=0;
+canvas_down_end_y=0;
+canvas_held = false;
+graph_canvas.onmousedown = function(event){
+	canvas_down_x = curr_mouse_x;
+	canvas_down_y = curr_mouse_y;
+	canvas_down_start_x = start_x;
+	canvas_down_start_y = start_y;
+	canvas_down_end_x = end_x;
+	canvas_down_end_y = end_y;
+	canvas_held = true;
+}
+
+function update_bounds(){
+	delta_x = curr_mouse_x - canvas_down_x;
+	delta_y = curr_mouse_y - canvas_down_y;
+	delta_x *= (canvas_down_end_x - canvas_down_start_x)/graph_canvas.width;
+	delta_y *= (canvas_down_end_y - canvas_down_start_y)/graph_canvas.height;
+	start_x = canvas_down_start_x - delta_x;
+	start_y = canvas_down_start_y + delta_y;
+	end_x = canvas_down_end_x - delta_x;
+	end_y = canvas_down_end_y + delta_y;
+}
+
+graph_canvas.onmouseup = function(event){
+	update_bounds();
+	canvas_held = false;
+}
