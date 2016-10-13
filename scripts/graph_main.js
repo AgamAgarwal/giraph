@@ -38,35 +38,25 @@ function create_function(expr) {
 
 function plot(expr, timestamp, color) {
 	func = create_function(expr);
-
 	present_time = timestamp/100;
-
-	first_point = true;
-	canvas_context.beginPath();
-	canvas_context.moveTo(0,0);
-	for(i=start_x;i<=end_x;i+=(end_x-start_x)/n_points){
-		x = i;
+	canvas_context.fillStyle=color;
+	for(i=0;i<=graph_canvas.width;i++){
+		x = i*(end_x-start_x)/graph_canvas.width+start_x;
 		y = func(x, present_time);
 		if (isNaN(y)) {
 			continue;
 		}
-		plot_x = (x-start_x)/(end_x-start_x)*graph_canvas.width;
-		plot_y = graph_canvas.height-(y-start_y)/(end_y-start_y)*graph_canvas.height;
-		if(first_point){
-			canvas_context.moveTo(plot_x, plot_y);
-			first_point = false;
-		}else{
-			canvas_context.lineTo(plot_x, plot_y);
-		}
+		plot_x = Math.round((x-start_x)/(end_x-start_x)*graph_canvas.width);
+		plot_y = Math.round(graph_canvas.height-(y-start_y)/(end_y-start_y)*graph_canvas.height);
+		canvas_context.fillRect(plot_x, plot_y, 1, 1);
 	}
-	canvas_context.strokeStyle = color;
-	canvas_context.stroke();
+	
 }
 
 function draw_frame(timestamp) {
 	canvas_context.clearRect(0,0,graph_canvas.width, graph_canvas.height);
 	expr = document.getElementById("expression1").value;
-	plot(expr, timestamp, "red");
+	plot(expr, timestamp,"red");
 }
 
 last_time = 0;
